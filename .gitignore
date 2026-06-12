@@ -1,0 +1,9 @@
+# Node dependencies and build folders
+node_modules/
+dist/
+
+# IDE and OS
+.DS_Store
+.idea/
+.vscode/
+*.log
