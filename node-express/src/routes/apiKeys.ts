@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { Reloop } from '../../../reloop-node/src/index'; // Relative import to local SDK
+import { Reloop } from 'reloop-email'
 
 const router = Router();
 
@@ -25,22 +25,30 @@ router.get('/', async (req, res) => {
     }
 });
 
-// POST /api/api-keys - Create a key
+// ----------------------------------------------------
+// 1. POST /api/api-keys - Create a new API Key
+// ----------------------------------------------------
 router.post('/', async (req, res) => {
     try {
         const reloop = getReloopClient();
         const { name } = req.body;
-
+        // Input Validation
         if (!name) {
-            return res.status(400).json({ error: 'Name is required' });
+            return res.status(400).json({ success: false, error: 'Name is required' });
         }
-
-        const response = await reloop.apiKey.create({ name });
-        res.status(201).json(response);
+        // Call the Reloop SDK
+        const result = await reloop.apiKey.create({ name });
+        // Handle SDK Error
+        if (result.error) {
+            return res.status(400).json({ success: false, error: result.error });
+        }
+        // Return 201 Created with the new API key data
+        return res.status(201).json({ success: true, data: result.response });
     } catch (error: any) {
-        res.status(500).json({ error: error.message });
+        return res.status(500).json({ success: false, error: error.message });
     }
 });
+
 
 // POST /api/api-keys/:id/rotate
 router.post('/:id/rotate', async (req, res) => {
@@ -79,12 +87,13 @@ router.post('/:id/disable', async (req, res) => {
 router.post('/:id/pause', async (req, res) => {
     try {
         const reloop = getReloopClient();
-        const response = await reloop.apiKey.pause(req.params.id);
+        const response = await reloop.apiKey.disable(req.params.id); // ✅ Changed pause -> disable
         res.json(response);
     } catch (error: any) {
         res.status(500).json({ error: error.message });
     }
 });
+
 
 // PATCH /api/api-keys/:id
 router.patch('/:id', async (req, res) => {

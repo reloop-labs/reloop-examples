@@ -9,13 +9,13 @@ const port = process.env.PORT || 3000;
 
 app.use(express.json());
 
-// Routes
+// Mount the API Keys router at /api/api-keys
 app.use('/api/api-keys', apiKeyRoutes);
 
 app.get('/', (req, res) => {
-  res.send('Reloop Express Example API');
+  res.send('Reloop Express Example API is running!');
 });
 
 app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+  console.log(`🚀 Server is running on http://localhost:${port}`);
 });
