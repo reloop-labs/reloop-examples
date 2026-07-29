@@ -1,0 +1,18 @@
+# Target compilation directory
+target/
+
+# Environment secrets
+.env
+.env.local
+
+# IDE configurations
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
