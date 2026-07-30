@@ -1,0 +1,11 @@
+# Compilation output
+/target
+
+# Environment secrets
+.env
+.env.local
+
+# IDE & OS
+.idea/
+.vscode/
+.DS_Store
