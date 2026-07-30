@@ -1,0 +1,6 @@
+source "https://rubygems.org"
+
+gem "sinatra"
+gem "dotenv"
+gem "webrick"
+gem "reloop", path: "/Users/twinkal/Development/sdk/reloop-ruby"

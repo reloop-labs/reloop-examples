@@ -1,0 +1,12 @@
+# Dependencies
+vendor/
+.bundle/
+
+# Environment secrets
+.env
+.env.local
+
+# IDE & OS
+.idea/
+.vscode/
+.DS_Store
