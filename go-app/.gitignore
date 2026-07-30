@@ -1,0 +1,13 @@
+# Compiled binaries
+go-app
+*.exe
+*.out
+
+# Environment secrets
+.env
+.env.local
+
+# IDE & OS
+.idea/
+.vscode/
+.DS_Store
