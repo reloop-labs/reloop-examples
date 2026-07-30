@@ -1,0 +1,13 @@
+# Compilation output
+bin/
+obj/
+
+# Environment secrets
+.env
+.env.local
+
+# IDE & OS
+.idea/
+.vscode/
+*.user
+.DS_Store
