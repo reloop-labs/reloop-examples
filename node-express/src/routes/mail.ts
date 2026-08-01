@@ -110,7 +110,7 @@ mailRouter.post("/send-attachments", async (req: Request, res: Response) => {
 			attachments: [
 				{
 					filename: "invoice_2026.txt",
-					content: Buffer.from("Invoice ID: #INV-2026-001\nTotal: $150.00\nStatus: Paid").toString("base64"),
+					content: "Invoice ID: #INV-2026-001\nTotal: $150.00\nStatus: Paid",
 					content_type: "text/plain",
 				},
 			],
