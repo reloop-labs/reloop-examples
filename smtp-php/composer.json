@@ -1,0 +1,8 @@
+{
+    "name": "reloop/smtp-php-example",
+    "description": "Send emails via Reloop SMTP using PHPMailer in PHP",
+    "require": {
+        "phpmailer/phpmailer": "^6.9",
+        "vlucas/phpdotenv": "^5.6"
+    }
+}

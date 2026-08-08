@@ -1,0 +1,13 @@
+{
+  "name": "reloop-smtp-nodemailer-example",
+  "version": "1.0.0",
+  "description": "Send emails via Reloop SMTP using Nodemailer in Node.js",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "nodemailer": "^6.10.0"
+  }
+}

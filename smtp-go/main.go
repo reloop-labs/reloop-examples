@@ -1,0 +1,100 @@
+package main
+
+import (
+	"bufio"
+	"crypto/tls"
+	"fmt"
+	"net/smtp"
+	"os"
+	"strings"
+)
+
+func loadEnv() {
+	file, err := os.Open(".env")
+	if err != nil {
+		return
+	}
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		line := strings.TrimSpace(scanner.Text())
+		if line == "" || strings.HasPrefix(line, "#") {
+			continue
+		}
+		parts := strings.SplitN(line, "=", 2)
+		if len(parts) == 2 {
+			os.Setenv(parts[0], parts[1])
+		}
+	}
+}
+
+func main() {
+	loadEnv()
+
+	apiKey := os.Getenv("RELOOP_API_KEY")
+	if apiKey == "" {
+		fmt.Println("Error: RELOOP_API_KEY environment variable is required.")
+		os.Exit(1)
+	}
+
+	host := "smtp.reloop.sh"
+	port := "465"
+	from := "onboarding@yourdomain.com"
+	to := []string{"recipient@example.com"}
+
+	msg := []byte("To: recipient@example.com\r\n" +
+		"From: " + from + "\r\n" +
+		"Subject: Hello from Reloop SMTP\r\n" +
+		"Content-Type: text/html; charset=UTF-8\r\n" +
+		"\r\n" +
+		"<p>Congrats on sending your first email via Reloop SMTP!</p>\r\n")
+
+	auth := smtp.PlainAuth("", "reloop", apiKey, host)
+	tlsConfig := &tls.Config{ServerName: host}
+
+	conn, err := tls.Dial("tcp", host+":"+port, tlsConfig)
+	if err != nil {
+		fmt.Println("Error connecting:", err)
+		return
+	}
+	defer conn.Close()
+
+	client, err := smtp.NewClient(conn, host)
+	if err != nil {
+		fmt.Println("Error creating client:", err)
+		return
+	}
+	defer client.Close()
+
+	if err = client.Auth(auth); err != nil {
+		fmt.Println("Auth failed:", err)
+		return
+	}
+	if err = client.Mail(from); err != nil {
+		fmt.Println("MAIL FROM failed:", err)
+		return
+	}
+	for _, addr := range to {
+		if err = client.Rcpt(addr); err != nil {
+			fmt.Println("RCPT TO failed:", err)
+			return
+		}
+	}
+	w, err := client.Data()
+	if err != nil {
+		fmt.Println("DATA failed:", err)
+		return
+	}
+	if _, err = w.Write(msg); err != nil {
+		fmt.Println("Write failed:", err)
+		return
+	}
+	if err = w.Close(); err != nil {
+		fmt.Println("Close failed:", err)
+		return
+	}
+	_ = client.Quit()
+
+	fmt.Println("Email sent successfully!")
+}
